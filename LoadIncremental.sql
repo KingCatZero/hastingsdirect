@@ -5,27 +5,8 @@ AS
 DECLARE
     retCode INT DEFAULT 0;
 BEGIN
-    INSERT INTO FACT.CRIME
-    WITH
-        NEW_DATA AS (
-            SELECT
-                *
-            FROM LANDING.CRIME AS T
-            WHERE
-                NOT EXISTS (
-                    SELECT
-                        *
-                    FROM FACT.CRIME
-                    WHERE
-                        REPORT_POSTCODE = T.REPORT_POSTCODE
-                        AND REPORT_MONTH = T.REPORT_MONTH
-                )
-        )
-    SELECT
-        *
-    FROM NEW_DATA;
     
-    /*MERGE INTO FACT.CRIME AS TGT
+    MERGE INTO FACT.CRIME AS TGT
     USING LANDING.CRIME AS SRC ON
         SRC.REPORT_POSTCODE = TGT.REPORT_POSTCODE
         AND SRC.REPORT_MONTH = TGT.REPORT_MONTH
@@ -88,7 +69,7 @@ BEGIN
             ,SRC.REPORT_LONGITUDE
             ,SRC.REPORT_POSTCODE
             ,SRC.REPORT_MONTH
-        );*/
+        );
 
     RETURN retCode;
 END;
